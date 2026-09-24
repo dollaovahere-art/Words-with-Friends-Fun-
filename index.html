@@ -229,28 +229,20 @@
             </div>
         </div>
     </div>
-    <script>
-        // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyB6CJI7Zazr255vj_Gt3PrYGbLbIwlSPps",
-  authDomain: "words-with-family.firebaseapp.com",
-  projectId: "words-with-family",
-  storageBucket: "words-with-family.firebasestorage.app",
-  messagingSenderId: "934512914702",
-  appId: "1:934512914702:web:79ca40054c9ab3f4cc675f",
-  measurementId: "G-7RNCV6FWE6"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+        <script>
+        // ================= MULTIPLIER CORE DATABASE PROFILE CREATION CONFIGURATION =================
+        // Replace this template configuration object keys with the exact matching parameters from your Firebase Dashboard console project keys listing.
+        const firebaseConfig = {
+            apiKey: "PASTE_YOUR_API_KEY_HERE",
+            authDomain: "://firebaseapp.com",
+            databaseURL: "https://firebaseio.com", 
+            projectId: "words-with-family",
+            storageBucket: "://appspot.com",
+            messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
+            appId: "PASTE_YOUR_APP_ID_HERE"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
         let currentRoomId = "room101";
@@ -275,7 +267,6 @@ const analytics = getAnalytics(app);
             playSuccess() { if (isAppAudioSystemMutedGlobal) return; this.init(); [261.63, 329.63, 392.00, 523.25].forEach((freq, idx) => { let osc = this.ctx.createOscillator(), g = this.ctx.createGain(); osc.connect(g); g.connect(this.ctx.destination); osc.frequency.setValueAtTime(freq, this.ctx.currentTime + (idx * 0.1)); g.gain.setValueAtTime(0.15, this.ctx.currentTime + (idx * 0.1)); g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + (idx * 0.1) + 0.25); osc.start(this.ctx.currentTime + (idx * 0.1)); osc.stop(this.ctx.currentTime + (idx * 0.1) + 0.25); }); },
             playError() { if (isAppAudioSystemMutedGlobal) return; this.init(); let osc = this.ctx.createOscillator(), g = this.ctx.createGain(); osc.connect(g); g.connect(this.ctx.destination); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(110.00, this.ctx.currentTime); g.gain.setValueAtTime(0.25, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.3); osc.start(); osc.stop(this.ctx.currentTime + 0.3); }
         };
-
         function buildInteractiveMatrix() {
             const boardContainer = document.getElementById('main-scrabble-board'); boardContainer.innerHTML = '';
             for (let r = 0; r < 15; r++) {
@@ -299,6 +290,7 @@ const analytics = getAnalytics(app);
                 }
             }
         }
+
         function stylePlacedTileLock(el) { el.style.background = '#475569'; el.style.cursor = 'default'; el.setAttribute('draggable', 'false'); }
 
         function renderPlayerRackSlots() {
@@ -385,9 +377,3 @@ const analytics = getAnalytics(app);
         }
 
         function lockPlacedTurnTiles() { activeRackLetters = activeRackLetters.filter(t => !t.placedCoord); while(activeRackLetters.length < 7) { const randomLetters = ["A","E","I","O","T","S","N"]; const randL = randomLetters[Math.floor(Math.random() * randomLetters.length)]; activeRackLetters.push({ id: "t_" + Math.random().toString(36).substr(2, 4), letter: randL, points: 1 }); } renderPlayerRackSlots(); calculateLiveTurnScore(); }
-        function resetCurrentTurnTiles() { AudioSynthEngine.playClick(); activeRackLetters.forEach(t => t.placedCoord = null); syncInterfaceDisplayElements(); }
-        function shuffleRackTiles() { AudioSynthEngine.playClick(); activeRackLetters.sort(() => Math.random() - 0.5); renderPlayerRackSlots(); }
-        function toggleAppAudioMuteSystem() { isAppAudioSystemMutedGlobal = !isAppAudioSystemMutedGlobal; document.getElementById('master-mute-toggle-btn').style.opacity = isAppAudioSystemMutedGlobal ? '0.4' : '1.0'; }
-        function populateTileBagView() { const bagView = document.getElementById('tile-bag-grid-view'); if(!bagView) return; bagView.innerHTML = ''; Object.keys(TILE_BAG_LEDGER).forEach(letter => { const pill = document.createElement('div'); pill.classList.add('bag-count-pill'); pill.innerHTML = `${letter}: <span>${TILE_BAG_LEDGER[letter]}</span>`; bagView.appendChild(pill); }); }
-        function lookupWordDefinitionInApp() { const queryWord = document.getElementById('dict-search-box').value.trim().toUpperCase(); const displayField = document.getElementById('dict-result-display'); if(DICTIONARY_DATABASE[queryWord]) { AudioSynthEngine.playClick(); displayField.innerHTML = `<span style="color:#22c55e; font-weight:bold;">&check; VALID:</span> - ${DICTIONARY_DATABASE[queryWord]}`; } else { AudioSynthEngine.playError(); displayField.innerHTML = `<span style="color:#ef4444; font-weight:bold;">&cross; UNKNOWN.</span>`; } }
-        function navigateView(id) { document.querySelectorAll('.view-screen').forEach(v => v.classList.remove('active')); document.getElementById(`screen-${id}`).classList.add('active'); }
