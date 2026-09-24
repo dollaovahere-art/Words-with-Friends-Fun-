@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Duel Masters - Realtime Online Multiplayer</title>
     
-    <!-- Core Firebase SDKs loaded directly at the top -->
+    <!-- Core Firebase SDKs loaded directly with correct script paths -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
 
@@ -53,7 +53,7 @@
         .control-btn { background: transparent; border: none; color: white; font-size: 11px; font-weight: bold; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex: 1; }
         .control-btn svg { width: 20px; height: 20px; fill: currentColor; }
         .control-btn.main-play { background: #3b82f6; padding: 10px 24px; border-radius: 24px; font-size: 16px; flex: 1.5; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .drawer-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; z-index: 100; }
+        .drawer-overlay { position: absolute; top: 0; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; z-index: 100; }
         .drawer-overlay.active { display: block; }
         .more-drawer { position: absolute; bottom: 0; left: 0; right: 0; background: #1e293b; color: white; border-top-left-radius: 16px; border-top-right-radius: 16px; padding: 16px 0; transform: translateY(100%); transition: transform 0.25s ease-out; z-index: 101; max-height: 80%; overflow-y: auto; }
         .more-drawer.open { transform: translateY(0); }
@@ -87,24 +87,28 @@
 </head>
 <body class="skin-aqua" id="app-root-body">
     <div class="app-container">
-        <!-- SCREEN 1: ROOM ENTER LOBBY -->
+        <!-- VIEW SCREEN 1: MULTI-DEVICE LOBBY CONNECT ROOM -->
         <div id="screen-home" class="view-screen active" style="padding: 20px;">
             <h2 style="margin-bottom: 16px; color: var(--app-blue)">Word Duel Online</h2>
+            
             <label style="font-weight: bold; margin-bottom: 6px; display: block">Your Player Username:</label>
             <input type="text" id="input-username" class="config-input-field" value="Player">
+
             <label style="font-weight: bold; margin-bottom: 6px; display: block">Target Session Room ID:</label>
             <input type="text" id="input-room-id" class="config-input-field" value="room101">
+
             <label style="font-weight: bold; margin-bottom: 6px; display: block">Select Your Device Role Allocation:</label>
             <select id="input-role" class="config-input-field" style="background: white;">
                 <option value="player1">Player 1 (Host)</option>
                 <option value="player2">Player 2 (Opponent)</option>
             </select>
+
             <button onclick="saveProfileAndLaunch()" style="background: var(--app-blue); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%">
                 Connect & Match Sync Devices
             </button>
         </div>
 
-        <!-- SCREEN 2: MAIN BOARD VIEW -->
+        <!-- VIEW SCREEN 2: MAIN BOARD ELEMENT MATRIX -->
         <div id="screen-game" class="view-screen">
             <div class="header-bar">
                 <div class="profile-trigger" onclick="showUserProfileView('player1')">
@@ -114,9 +118,11 @@
                         <div class="score-box" id="live-score-p1">0</div>
                     </div>
                 </div>
+                
                 <button id="master-mute-toggle-btn" onclick="toggleAppAudioMuteSystem()" style="background: none; border: none; color: white; cursor: pointer; padding:6px; display:flex;">
                     <svg id="mute-icon-svg" viewBox="0 0 24 24" style="width: 22px; height: 24px; fill: currentColor;"><path d="M3 9v6h4l7 7V2L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
                 </button>
+
                 <div class="profile-trigger" onclick="showUserProfileView('player2')">
                     <div style="text-align: right; margin-right:10px;">
                         <div style="font-size: 11px;" id="name-display-p2">Player 2</div>
@@ -125,6 +131,7 @@
                     <div class="user-avatar" style="background: #f97316; color: white;">P2</div>
                 </div>
             </div>
+
             <div class="skin-selector-toolbar">
                 <span id="turn-indicator-badge" style="background:#22c55e; color:white; padding:2px 8px; border-radius:10px;">Connecting...</span>
                 <div class="skin-btn-group">
@@ -133,9 +140,11 @@
                     <button class="skin-toggle-btn" id="btn-skin-carbon" onclick="swapTileCosmeticSkin('carbon')">Carbon</button>
                 </div>
             </div>
+
             <div class="board-wrapper" id="board-click-wrapper">
                 <div class="board-grid" id="main-scrabble-board"></div>
             </div>
+
             <div class="player-rack-area">
                 <div class="strength-indicator-row">
                     <span class="score-preview-banner" id="score-preview-banner">Connecting...</span>
@@ -144,6 +153,7 @@
                 </div>
                 <div class="tile-rack" id="live-rack-container"></div>
             </div>
+
             <div class="bottom-action-bar">
                 <button class="control-btn" onclick="toggleDrawerAction(true)">
                     <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
@@ -165,7 +175,7 @@
             </div>
         </div>
 
-        <!-- SCREEN 3: PROFILE METRICS -->
+        <!-- VIEW SCREEN 3: PROFILE SUMMARIES -->
         <div id="screen-profile" class="view-screen">
             <div class="header-bar" style="background:#0284c7">
                 <button onclick="navigateView('game')" style="background:none; border:none; color:white; font-weight:bold; font-size:14px; cursor:pointer;">&larr; Game Board</button>
@@ -187,7 +197,7 @@
             <div style="padding: 0 12px 10px;"><div id="profile-historical-match-ledger-list"></div></div>
         </div>
 
-        <!-- CONTEXT DRAWER SHEET OVERLAY -->
+        <!-- TOOLS SHEET TRAY OVERLAY -->
         <div class="drawer-overlay" id="action-drawer-overlay" onclick="toggleDrawerAction(false)">
             <div class="more-drawer" id="action-sliding-drawer" onclick="event.stopPropagation()">
                 <div class="dictionary-lookup-panel">
@@ -203,7 +213,7 @@
         </div>
     </div>
     <script>
-        // Audio Synth Engine placed at the absolute top of the script section
+        // Audio synthesis engine mounted at the top to secure availability
         const AudioSynthEngine = {
             ctx: null, init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
             playClick() { if (isAppAudioSystemMutedGlobal) return; this.init(); let osc = this.ctx.createOscillator(), g = this.ctx.createGain(); osc.connect(g); g.connect(this.ctx.destination); osc.frequency.setValueAtTime(587.33, this.ctx.currentTime); g.gain.setValueAtTime(0.15, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08); osc.start(); osc.stop(this.ctx.currentTime + 0.08); },
@@ -211,7 +221,7 @@
             playError() { if (isAppAudioSystemMutedGlobal) return; this.init(); let osc = this.ctx.createOscillator(), g = this.ctx.createGain(); osc.connect(g); g.connect(this.ctx.destination); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(110.00, this.ctx.currentTime); g.gain.setValueAtTime(0.25, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.3); osc.start(); osc.stop(this.ctx.currentTime + 0.3); }
         };
 
-        // Replace these keys with your real Firebase parameters
+        // Firebase Configuration profiles template parameters 
         const firebaseConfig = {
             apiKey: "AIzaSyFakeKey_YOUR_ACTUAL_FIREBASE_API_KEY",
             authDomain: "://firebaseapp.com",
@@ -222,7 +232,6 @@
             appId: "1:1234567890:web:abcdef123456"
         };
 
-        // Global variables initialized safely
         var database = null;
         var currentRoomId = "room101";
         var assignedPlayerRole = "player1"; 
@@ -239,6 +248,47 @@
         let isAppAudioSystemMutedGlobal = false;
         let activeRackLetters = [ { id: "t1", letter: "W", points: 4 }, { id: "t2", letter: "O", points: 1 }, { id: "t3", letter: "R", points: 1 }, { id: "t4", letter: "D", points: 2 }, { id: "t5", letter: "G", points: 2 }, { id: "t6", letter: "A", points: 1 }, { id: "t7", letter: "M", points: 3 } ];
         let turnTimerInterval = null;
+
+        // PROTECTIVE CRASH SHIELD: Catches empty configurations parameters and loads sandbox runtime cleanly
+        try {
+            if (typeof firebase !== 'undefined' && firebaseConfig.apiKey.indexOf("YOUR_ACTUAL") === -1) {
+                if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+                database = firebase.database();
+                console.log("Firebase authorized successfully.");
+            } else {
+                console.warn("Running in Offline Sandbox Mode safely.");
+            }
+        } catch(e) {
+            console.error("Firebase startup safely halted, switching execution context:", e);
+        }
+
+        function saveProfileAndLaunch() {
+            AudioSynthEngine.playClick();
+            const username = document.getElementById('input-username').value.trim() || "Player";
+            currentRoomId = document.getElementById('input-room-id').value.trim() || "room101"; assignedPlayerRole = document.getElementById('input-role').value;
+            
+            if (database) {
+                database.ref('rooms/' + currentRoomId).on('value', (snapshot) => {
+                    const data = snapshot.val(); if (data) { onlineGameState = data; } else {
+                        onlineGameState = { activeTurn: "player1", player1Name: assignedPlayerRole === 'player1' ? username : "Player 1", player2Name: assignedPlayerRole === 'player2' ? username : "Player 2", player1Score: 0, player2Score: 0, expirationTime: Date.now() + (3*24*60*60*1000), boardMatrix: {} };
+                        database.ref('rooms/' + currentRoomId).set(onlineGameState);
+                    }
+                    syncInterfaceDisplayElements();
+                });
+            } else {
+                onlineGameState.player1Name = assignedPlayerRole === 'player1' ? username : "Player 1"; onlineGameState.player2Name = assignedPlayerRole === 'player2' ? username : "Player 2";
+                onlineGameState.expirationTime = Date.now() + (3*24*60*60*1000); syncInterfaceDisplayElements();
+            }
+            navigateView('game');
+        }
+        function syncInterfaceDisplayElements() {
+            document.getElementById('name-display-p1').innerText = onlineGameState.player1Name; document.getElementById('name-display-p2').innerText = onlineGameState.player2Name;
+            document.getElementById('live-score-p1').innerText = onlineGameState.player1Score; document.getElementById('live-score-p2').innerText = onlineGameState.player2Score;
+            const badge = document.getElementById('turn-indicator-badge'); 
+            if (onlineGameState.activeTurn === assignedPlayerRole) { badge.innerText = "YOUR TURN"; badge.style.background = "#22c55e"; } else { badge.innerText = database ? "OPPONENT'S TURN" : "LOCAL SANDBOX"; badge.style.background = database ? "#f97316" : "#3b82f6"; }
+            buildInteractiveMatrix(); renderPlayerRackSlots(); restartTurnTimeoutCountdown();
+        }
+
         function buildInteractiveMatrix() {
             const boardContainer = document.getElementById('main-scrabble-board'); boardContainer.innerHTML = '';
             for (let r = 0; r < 15; r++) {
@@ -264,12 +314,12 @@
                 const slot = document.createElement('div'); slot.classList.add('rack-slot'); slot.dataset.slotIndex = i; slot.addEventListener('dragover', (e) => e.preventDefault()); slot.addEventListener('drop', (e) => handleTileDropOnRackSlot(e, slot));
                 const matchingLetter = activeRackLetters[i]; if (matchingLetter && !matchingLetter.placedCoord) {
                     const tileEl = document.createElement('div'); tileEl.classList.add('letter-tile'); tileEl.setAttribute('draggable', 'true'); tileEl.id = matchingLetter.id; tileEl.innerHTML = `${matchingLetter.letter}<span class="points-val">${matchingLetter.points}</span>`;
-                    tileEl.addEventListener('dragstart', (e) => { if(onlineGameState.activeTurn !== assignedPlayerRole) { e.preventDefault(); return; } e.dataTransfer.setData('text/plain', matchingLetter.id); }); slot.appendChild(tileEl);
+                    tileEl.addEventListener('dragstart', (e) => { if(database && onlineGameState.activeTurn !== assignedPlayerRole) { e.preventDefault(); return; } e.dataTransfer.setData('text/plain', matchingLetter.id); }); slot.appendChild(tileEl);
                 }
                 rackContainer.appendChild(slot);
             }
         }
-        function handleTileDropOnCell(e, cell) { e.preventDefault(); if (onlineGameState.activeTurn !== assignedPlayerRole || cell.querySelector('.letter-tile')) return; const id = e.dataTransfer.getData('text/plain'), t = activeRackLetters.find(x => x.id === id); if (!t) return; t.placedCoord = `${cell.dataset.row},${cell.dataset.col}`; cell.appendChild(document.getElementById(id)); AudioSynthEngine.playClick(); calculateLiveTurnScore(); }
+        function handleTileDropOnCell(e, cell) { e.preventDefault(); if (cell.querySelector('.letter-tile')) return; const id = e.dataTransfer.getData('text/plain'), t = activeRackLetters.find(x => x.id === id); if (!t) return; t.placedCoord = `${cell.dataset.row},${cell.dataset.col}`; cell.appendChild(document.getElementById(id)); AudioSynthEngine.playClick(); calculateLiveTurnScore(); }
         function handleTileDropOnRackSlot(e, slot) { e.preventDefault(); if (slot.querySelector('.letter-tile')) return; const id = e.dataTransfer.getData('text/plain'), t = activeRackLetters.find(x => x.id === id); if (!t) return; t.placedCoord = null; slot.appendChild(document.getElementById(id)); AudioSynthEngine.playClick(); calculateLiveTurnScore(); }
         function calculateLiveTurnScore() {
             let totalWordScore = 0, wordMultiplier = 1, currentWordString = ""; const placedTiles = activeRackLetters.filter(t => t.placedCoord);
@@ -278,27 +328,6 @@
             updateWordStrengthMeter(currentWordString, finalCalculatedScore); return { score: finalCalculatedScore, word: currentWordString, tiles: placedTiles };
         }
         function updateWordStrengthMeter(word, score) { const fill = document.getElementById('strength-fill-meter'), lbl = document.getElementById('strength-label-text'); if(!word){ fill.style.width="0%"; lbl.innerText="Waiting"; return; } if(!DICTIONARY.includes(word)){ fill.style.width="25%"; fill.style.backgroundColor="#ef4444"; lbl.innerText="Invalid"; } else { fill.style.width="100%"; fill.style.backgroundColor="#22c55e"; lbl.innerText="Excellent"; } }
-        function saveProfileAndLaunch() {
-            AudioSynthEngine.playClick();
-            if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-            database = firebase.database();
-            const username = document.getElementById('input-username').value.trim() || "Player";
-            currentRoomId = document.getElementById('input-room-id').value.trim() || "room101"; assignedPlayerRole = document.getElementById('input-role').value;
-            database.ref('rooms/' + currentRoomId).on('value', (snapshot) => {
-                const data = snapshot.val(); if (data) { onlineGameState = data; } else {
-                    onlineGameState = { activeTurn: "player1", player1Name: assignedPlayerRole === 'player1' ? username : "Player 1", player2Name: assignedPlayerRole === 'player2' ? username : "Player 2", player1Score: 0, player2Score: 0, expirationTime: Date.now() + (3*24*60*60*1000), boardMatrix: {} };
-                    database.ref('rooms/' + currentRoomId).set(onlineGameState);
-                }
-                syncInterfaceDisplayElements();
-            });
-            navigateView('game');
-        }
-        function syncInterfaceDisplayElements() {
-            document.getElementById('name-display-p1').innerText = onlineGameState.player1Name; document.getElementById('name-display-p2').innerText = onlineGameState.player2Name;
-            document.getElementById('live-score-p1').innerText = onlineGameState.player1Score; document.getElementById('live-score-p2').innerText = onlineGameState.player2Score;
-            const badge = document.getElementById('turn-indicator-badge'); if (onlineGameState.activeTurn === assignedPlayerRole) { badge.innerText = "YOUR TURN"; badge.style.background = "#22c55e"; } else { badge.innerText = "OPPONENT'S TURN"; badge.style.background = "#f97316"; }
-            buildInteractiveMatrix(); renderPlayerRackSlots(); restartTurnTimeoutCountdown();
-        }
         function restartTurnTimeoutCountdown() {
             clearInterval(turnTimerInterval); const banner = document.getElementById('score-preview-banner');
             turnTimerInterval = setInterval(() => {
@@ -308,16 +337,23 @@
             }, 1000);
         }
         function validateCurrentTurnWord() {
-            if (onlineGameState.activeTurn !== assignedPlayerRole) { alert("Please wait for your turn!"); return; }
+            if (database && onlineGameState.activeTurn !== assignedPlayerRole) { alert("Please wait for your turn!"); return; }
             const turnData = calculateLiveTurnScore(); if (!turnData.word) { AudioSynthEngine.playError(); alert("Place tiles first!"); return; }
             if (DICTIONARY.includes(turnData.word)) {
                 AudioSynthEngine.playSuccess(); if (!onlineGameState.boardMatrix) onlineGameState.boardMatrix = {};
                 turnData.tiles.forEach(t => { onlineGameState.boardMatrix[t.placedCoord] = { letter: t.letter, points: t.points }; });
                 if (assignedPlayerRole === 'player1') onlineGameState.player1Score += turnData.score; else onlineGameState.player2Score += turnData.score;
-                onlineGameState.activeTurn = assignedPlayerRole === 'player1' ? 'player2' : 'player1'; onlineGameState.expirationTime = Date.now() + (3*24*60*60*1000);
-                database.ref('rooms/' + currentRoomId).set(onlineGameState); lockPlacedTurnTiles();
+                if (database) {
+                    onlineGameState.activeTurn = assignedPlayerRole === 'player1' ? 'player2' : 'player1'; onlineGameState.expirationTime = Date.now() + (3*24*60*60*1000);
+                    database.ref('rooms/' + currentRoomId).set(onlineGameState);
+                } else {
+                    onlineGameState.expirationTime = Date.now() + (3*24*60*60*1000); syncInterfaceDisplayElements();
+                }
+                lockPlacedTurnTiles();
             } else { AudioSynthEngine.playError(); alert(`"${turnData.word}" is not valid.`); }
         }
         function lockPlacedTurnTiles() { activeRackLetters = activeRackLetters.filter(t => !t.placedCoord); while(activeRackLetters.length < 7) { const randomLetters = ["A","E","I","O","T","S","N"]; const randL = randomLetters[Math.floor(Math.random() * randomLetters.length)]; activeRackLetters.push({ id: "t_" + Math.random().toString(36).substr(2, 4), letter: randL, points: 1 }); } renderPlayerRackSlots(); calculateLiveTurnScore(); }
         function resetCurrentTurnTiles() { AudioSynthEngine.playClick(); activeRackLetters.forEach(t => t.placedCoord = null); syncInterfaceDisplayElements(); }
         function shuffleRackTiles() { AudioSynthEngine.playClick(); activeRackLetters.sort(() => Math.random() - 0.5); renderPlayerRackSlots(); }
+        function toggleAppAudioMuteSystem() { isAppAudioSystemMutedGlobal = !isAppAudioSystemMutedGlobal; document.getElementById('master-mute-toggle-btn').style.opacity = isAppAudioSystemMutedGlobal ? '0.4' : '1.0'; }
+        function populateTileBagView() { const bagView = document.getElementById('tile-bag-grid-view'); if(!bagView) return; bagView.innerHTML = ''; Object.keys(TILE_BAG_LEDGER).forEach(letter => { const pill = document.createElement('div'); pill.classList.add('bag-count-pill'); pill.innerHTML = `${letter}: <span>${TILE_BAG_LEDGER[letter]}</span>`; bagView.appendChild(pill); }); }
