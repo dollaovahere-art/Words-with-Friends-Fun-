@@ -1,21 +1,23 @@
 // ================= FIREBASE DATABASE INITIALIZATION =================
-// Paste your exact project keys from your Firebase Web App screen right here!
+// Replace this configuration with the exact values from your Firebase Web App screen!
 const firebaseConfig = {
-    apiKey: "PASTE_YOUR_API_KEY_HERE",
-    authDomain: "://firebaseapp.com",
+    apiKey: "AIzaSyFakeKey_YOUR_ACTUAL_FIREBASE_API_KEY",
+    authDomain: "words-with-family.firebaseapp.com",
     databaseURL: "https://firebaseio.com", 
     projectId: "words-with-family",
-    storageBucket: "://appspot.com",
-    messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
-    appId: "PASTE_YOUR_APP_ID_HERE"
+    storageBucket: "words-with-family.appspot.com",
+    messagingSenderId: "1234567890",
+    appId: "1:1234567890:web:abcdef123456"
 };
 
+// Initialize App Safely Once
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-let currentRoomId = "room101";
-let assignedPlayerRole = "player1"; 
-let onlineGameState = { activeTurn: "player1", player1Name: "Player 1", player2Name: "Player 2", player1Score: 0, player2Score: 0, expirationTime: 0, boardMatrix: {} };
+// Global Variables
+var currentRoomId = "room101";
+var assignedPlayerRole = "player1"; 
+var onlineGameState = { activeTurn: "player1", player1Name: "Player 1", player2Name: "Player 2", player1Score: 0, player2Score: 0, expirationTime: 0, boardMatrix: {} };
 
 const DICTIONARY_DATABASE = { "HELLO": "A greeting.", "WORLD": "The planet Earth.", "PLAY": "To engage in a game.", "WORDS": "Speech elements.", "GAME": "A contest with rules.", "DUEL": "A match between two competitors.", "TILES": "Letter blocks.", "MAGIC": "Influencing events with forces." };
 const DICTIONARY = Object.keys(DICTIONARY_DATABASE);
